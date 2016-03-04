@@ -9,7 +9,7 @@ var x_dir = 1;
 var y_dir = -1;
 var control_x = 250;
 var ai_x = 250;
-var speed = 3;
+var speed = 5;
 var losses = 0;
 var move_left = false;
 var move_right = false;
@@ -73,6 +73,7 @@ var reset = function() {
   move_left = false;
   move_right = false;
 }
+
 //how the ball moves
 var move_commands = function(){
   ball_x+=x_dir;
@@ -80,10 +81,10 @@ var move_commands = function(){
   if(ball_x <= 5 || ball_x >= 495){
     x_dir=x_dir*-1;
   }
-  if(ball_y >= 475 && Math.abs(control_x - ball_x)<=50){
+  if(ball_y >= 470 /*&& Math.abs(control_x - ball_x)<=50*/){
     y_dir=-1;
   }
-  if(ball_y <= 35){
+  if(ball_y <= 45){
     y_dir = 1;
   }
   if(move_right && control_x < 450){
@@ -95,6 +96,13 @@ var move_commands = function(){
   if(ball_y >= 495){
     reset();
   }
+  if(ball_y < 300)
+    if(ball_x - ai_x > 20 && ai_x < 450){
+      ai_x+=1.2;
+    }
+    if(ball_x - ai_x < 20 && ai_x > 50){
+      ai_x-=1.2;
+    }
 }
 //commands that run every frame
 var frame = function(e){
