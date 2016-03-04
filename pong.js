@@ -9,13 +9,15 @@ var x_dir = 1;
 var y_dir = -1;
 var control_x = 250;
 var ai_x = 250;
-var speed = 10;
+var speed = 3;
 var losses = 0;
+var move_left = false;
+var move_right = false;
 
 //clears the screen
 var blank = function(e) {
   ctx.beginPath();
-  ctx.fillStyle = "black";
+  ctx.fillStyle = "#333333";
   ctx.fillRect(0,0,500,500);
 }
 //puts the ball at the ball's x & y coordinates
@@ -59,10 +61,47 @@ var setup = function(e){
   ball();
   bars();
 }
-
-
+var reset = function() {
+  game_on = false;
+  ball_x = 250;
+  ball_y = 455;
+  x_dir = 1;
+  y_dir = -1;
+  control_x = 250;
+  ai_x = 250;
+  losses++;
+  move_left = false;
+  move_right = false;
+}
+//how the ball moves
+var move_commands = function(){
+  ball_x+=x_dir;
+  ball_y+=y_dir;
+  if(ball_x <= 5 || ball_x >= 495){
+    x_dir=x_dir*-1;
+  }
+  if(ball_y >= 475 && Math.abs(control_x - ball_x)<=50){
+    y_dir=-1;
+  }
+  if(ball_y <= 35){
+    y_dir = 1;
+  }
+  if(move_right && control_x < 450){
+    control_x++;
+  }
+  if(move_left && control_x > 50){
+    control_x--;
+  }
+  if(ball_y >= 495){
+    reset();
+  }
+}
+//commands that run every frame
 var frame = function(e){
     setup();
-    console.log('x');
+    console.log('losses:'+losses);
+    if(game_on){
+      move_commands();
+    }
 }
 var go = setInterval(frame,speed);
