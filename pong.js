@@ -96,15 +96,14 @@ var move_commands = function(){
 	reset();
     }
     if(y_dir == -1){
-	var pred_x = Math.abs(ball_x + ydir*(ball_y - 25))
-	if(pred_x > 450){
-	    pred_x = 900 - pred_x
+	var pred_x = Math.abs(ball_x + x_dir*(ball_y - 45))
+	if(pred_x > 495){
+	    pred_x = 990 - pred_x;
 	}
-	if(pred_x < ai_x && ai_x < 450){
-	    ai_x += Math.min(1.2, Math.abs(ai_x - pred_x));
-	}
-	if(pred_x > ai_x && ai_x > 50){
-	    ai_x -= Math.min(1.2, Math.abs(pred_x - ai_x));
+	if(pred_x < ai_x && ai_x > 50){
+	    ai_x -= Math.min(1.2, ai_x - pred_x);
+	}else if(pred_x > ai_x && ai_x < 450){
+	    ai_x += Math.min(1.2, pred_x - ai_x);
 	}
     }
 }
