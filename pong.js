@@ -96,8 +96,10 @@ var move_commands = function(){
 	reset();
     }
     if(y_dir == -1){
-	var pred_x = Math.abs(ball_x + x_dir*(ball_y - 45))
-	if(pred_x > 495){
+	var pred_x = ball_x + x_dir*(ball_y - 45)
+	if(pred_x <= 5){
+	    pred_x = 10 - pred_x;
+	}else if(pred_x >= 495){
 	    pred_x = 990 - pred_x;
 	}
 	if(pred_x < ai_x && ai_x > 50){
