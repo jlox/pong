@@ -1,7 +1,8 @@
 var c = document.getElementById("table");
 var ctx = c.getContext("2d");
+var loss_count = document.getElementById('lossCount');
 
-var game_on = true;
+var game_on = false;
 var ball_x = 250;
 var ball_y = 455;
 var x_dir = 1;
@@ -12,6 +13,7 @@ var speed = 5;
 var losses = 0;
 var move_left = false;
 var move_right = false;
+var timer_boolean = true;
 
 //clears the screen
 var blank = function(e) {
@@ -64,28 +66,31 @@ var setup = function(e){
     bars();
 }
 
-var reset = function() {
+var reset_everything = function() {
     game_on = false;
+    timer_boolean = false;
+    window.setTimeout(function(e){
+      timer_boolean = true;
+      console.log("aw");
+    }, 1000);
     ball_x = 250;
     ball_y = 455;
-    x_dir = 1;
-    y_dir = -1;
-    control_x = 250;
-    ai_x = 250;
-    losses++;
-    move_left = false;
-    move_right = false;
+      x_dir = 1;
+      y_dir = -1;
+      control_x = 250;
+      ai_x = 250;
+      losses++;
+      move_left = false;
+      move_right = false;
+      loss_count.innerHTML = "You have 0 Wins and "+losses+" Losses";
 }
 
 //how the ball moves
 var move_commands = function(){
     ball_x+=x_dir;
     ball_y+=y_dir;
-    if(ball_x <= 5 || ball_x >= 495){
-	x_dir=x_dir*-1;
-    }
-    if(ball_y >= 470){
-	y_dir=-1;
+    if(ball_x <= 15 || ball_x >= 485){
+	     x_dir=x_dir*-1;
     }
     if(ball_y <= 45){
 	y_dir = 1;
@@ -97,7 +102,7 @@ var move_commands = function(){
 	control_x--;
     }
     if(ball_y >= 495){
-	reset();
+	reset_everything();
     }
     if(ball_y < 300)
 	if(ball_x - ai_x > 20 && ai_x < 450){
@@ -120,8 +125,8 @@ var move_commands = function(){
 	y_dir = -y_dir;
     }
     //100x25 - if ball goes beyond "control_y", and isnt in range of the bar, reset
-    if((ball_y>460) && ((ball_x < (control_x - 50)) || (ball_x > (control_x + 50)))){
-	reset();
+    if((ball_y>480) && ((ball_x < (control_x - 50)) || (ball_x > (control_x + 50)))){
+	reset_everything();
     }
     if(y_dir == -1){
 	var pred_x = ball_x + x_dir*(ball_y - 45)
@@ -141,10 +146,15 @@ var move_commands = function(){
 //user input
 var moveBar = function(e){
     if (e.keyCode == 37){
-	move_left=true;
+	     move_left=true;
     } else if (e.keyCode == 39){
 	move_right=true;
-    }
+    } else if (e.keyCode == 32){
+  if(timer_boolean && !game_on){
+    game_on=true;
+  }
+}
+
 }
 
 var stopBar = function(e){
@@ -154,13 +164,13 @@ var stopBar = function(e){
 
 //commands that run every frame
 var frame = function(e){
-    setup();
-    console.log('losses:'+losses);
+    if(timer_boolean){
+        setup();
+      }
     if(game_on){
-	move_commands();
+	     move_commands();
     }
 }
-
 var go = setInterval(frame,speed);
 
 window.addEventListener('keydown', moveBar);
