@@ -1,4 +1,3 @@
-console.log("hello");
 var c = document.getElementById("table");
 var ctx = c.getContext("2d");
 
@@ -20,6 +19,7 @@ var blank = function(e) {
     ctx.fillStyle = "#333333";
     ctx.fillRect(0,0,500,500);
 }
+
 //puts the ball at the ball's x & y coordinates
 var ball = function(e){
     ctx.beginPath();
@@ -84,7 +84,7 @@ var move_commands = function(){
     if(ball_x <= 5 || ball_x >= 495){
 	x_dir=x_dir*-1;
     }
-    if(ball_y >= 470 /*&& Math.abs(control_x - ball_x)<=50*/){
+    if(ball_y >= 470){
 	y_dir=-1;
     }
     if(ball_y <= 45){
@@ -123,7 +123,19 @@ var move_commands = function(){
     if((ball_y>460) && ((ball_x < (control_x - 50)) || (ball_x > (control_x + 50)))){
 	reset();
     }
-    
+    if(y_dir == -1){
+	var pred_x = ball_x + x_dir*(ball_y - 45)
+	if(pred_x <= 5){
+	    pred_x = 10 - pred_x;
+	}else if(pred_x >= 495){
+	    pred_x = 990 - pred_x;
+	}
+	if(pred_x < ai_x && ai_x > 50){
+	    ai_x -= Math.min(1.2, ai_x - pred_x);
+	}else if(pred_x > ai_x && ai_x < 450){
+	    ai_x += Math.min(1.2, pred_x - ai_x);
+	}
+    }
 }
 
 //user input
@@ -148,6 +160,7 @@ var frame = function(e){
 	move_commands();
     }
 }
+
 var go = setInterval(frame,speed);
 
 window.addEventListener('keydown', moveBar);
