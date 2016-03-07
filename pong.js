@@ -150,10 +150,12 @@ var moveBar = function(e){
     } else if (e.keyCode == 39){
 	move_right=true;
     } else if (e.keyCode == 32){
-  if(timer_boolean && !game_on){
-    game_on=true;
+      if(timer_boolean && !game_on){
+      game_on=true;
+    }
+  }else if(e.keyCode == 80){
+    game_on = !game_on;
   }
-}
 
 }
 
