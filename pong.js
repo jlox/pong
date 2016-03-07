@@ -121,8 +121,8 @@ var move_commands = function(){
 	moveBar();
 	//move_right = false;
     }
-    if ((ball_y == 460) && ((ball_x > (control_x - 50)) && (ball_x < (control_x + 50)))){
-	y_dir = -y_dir;
+    if ((ball_y > 455 && ball_y < 475) && (Math.abs(ball_x - control_x) < 50)){
+	y_dir = -1;
     }
     //100x25 - if ball goes beyond "control_y", and isnt in range of the bar, reset
     if((ball_y>480) && ((ball_x < (control_x - 50)) || (ball_x > (control_x + 50)))){
