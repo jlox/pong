@@ -75,14 +75,14 @@ var reset_everything = function() {
     }, 1000);
     ball_x = 250;
     ball_y = 455;
-      x_dir = 1;
-      y_dir = -1;
-      control_x = 250;
-      ai_x = 250;
-      losses++;
-      move_left = false;
-      move_right = false;
-      loss_count.innerHTML = "You have 0 Wins and "+losses+" Losses";
+    x_dir = 1;
+    y_dir = -1;
+    control_x = 250;
+    ai_x = 250;
+    losses++;
+    move_left = false;
+    move_right = false;
+    loss_count.innerHTML = "You have 0 Wins and "+losses+" Losses";
 }
 
 //how the ball moves
@@ -90,7 +90,7 @@ var move_commands = function(){
     ball_x+=x_dir;
     ball_y+=y_dir;
     if(ball_x <= 15 || ball_x >= 485){
-	     x_dir=x_dir*-1;
+	x_dir*=-1;
     }
     if(ball_y <= 45){
 	y_dir = 1;
@@ -104,12 +104,18 @@ var move_commands = function(){
     if(ball_y >= 495){
 	reset_everything();
     }
-    if(ball_y < 300)
-	if(ball_x - ai_x > 20 && ai_x < 450){
-	    ai_x+=1.2;
+    if(y_dir == -1){
+	var pred_x = ball_x + x_dir*(ball_y - 45);
+	if(pred_x <= 15){
+	    pred_x = 30 - pred_x;
+	}else if(pred_x >= 485){
+	    pred_x = 970 - pred_x;
 	}
-    if(ball_x - ai_x < 20 && ai_x > 50){
-	ai_x-=1.2;
+	if(pred_x < ai_x && ai_x > 50){
+	    ai_x -= Math.min(1.2, ai_x - pred_x);
+	}else if(pred_x > ai_x && ai_x < 450){
+	    ai_x += Math.min(1.2, pred_x - ai_x);
+	}
     }
     if(move_right && (control_x<450)){
 	control_x+=1.5;
@@ -121,42 +127,28 @@ var move_commands = function(){
 	moveBar();
 	//move_right = false;
     }
-    if ((ball_y > 455 && ball_y < 475) && (Math.abs(ball_x - control_x) < 50)){
+    if((ball_y > 455 && ball_y < 475) && (Math.abs(ball_x - control_x) < 50)){
 	y_dir = -1;
     }
     //100x25 - if ball goes beyond "control_y", and isnt in range of the bar, reset
     if((ball_y>480) && ((ball_x < (control_x - 50)) || (ball_x > (control_x + 50)))){
 	reset_everything();
     }
-    if(y_dir == -1){
-	var pred_x = ball_x + x_dir*(ball_y - 45)
-	if(pred_x <= 5){
-	    pred_x = 10 - pred_x;
-	}else if(pred_x >= 495){
-	    pred_x = 990 - pred_x;
-	}
-	if(pred_x < ai_x && ai_x > 50){
-	    ai_x -= Math.min(1.2, ai_x - pred_x);
-	}else if(pred_x > ai_x && ai_x < 450){
-	    ai_x += Math.min(1.2, pred_x - ai_x);
-	}
-    }
 }
 
 //user input
 var moveBar = function(e){
-    if (e.keyCode == 37){
-	     move_left=true;
-    } else if (e.keyCode == 39){
+    if(e.keyCode == 37){
+	move_left=true;
+    }else if (e.keyCode == 39){
 	move_right=true;
-    } else if (e.keyCode == 32){
-      if(timer_boolean && !game_on){
-      game_on=true;
-    }
-  }else if(e.keyCode == 80){
-    game_on = !game_on;
-  }
-
+    }else if (e.keyCode == 32){
+	if(timer_boolean && !game_on){
+	    game_on=true;
+	}
+    }else if(e.keyCode == 80){
+	game_on = !game_on;
+    }   
 }
 
 var stopBar = function(e){
