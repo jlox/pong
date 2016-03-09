@@ -5,12 +5,13 @@ var loss_count = document.getElementById('lossCount');
 var game_on = false;
 var ball_x = 250;
 var ball_y = 455;
-var x_dir = 1;
+var x_dir = 2*Math.random()-1;
 var y_dir = -1;
 var control_x = 250;
 var ai_x = 250;
 var speed = 5;
 var losses = 0;
+var wins = 0;
 var move_left = false;
 var move_right = false;
 var timer_boolean = true;
@@ -75,25 +76,32 @@ var reset_everything = function() {
     }, 1000);
     ball_x = 250;
     ball_y = 455;
-    x_dir = 1;
+    x_dir = 2*Math.random()-1;
     y_dir = -1;
     control_x = 250;
     ai_x = 250;
-    losses++;
     move_left = false;
     move_right = false;
-    loss_count.innerHTML = "You have 0 Wins and "+losses+" Losses";
+    loss_count.innerHTML = "You have "+wins+" Wins and "+losses+" Losses";
 }
 
 //how the ball moves
 var move_commands = function(){
     ball_x+=x_dir;
     ball_y+=y_dir;
-    if(ball_x <= 15 || ball_x >= 485){
-	x_dir*=-1;
+    if(ball_x >= 485){
+	     x_dir = -1*Math.abs(x_dir);
     }
-    if(ball_y <= 45){
-	y_dir = 1;
+    if(ball_x <= 15){
+      x_dir = Math.abs(x_dir);
+    }
+    if(ball_y <= 45 && Math.abs(ball_x-ai_x) <= 50){
+	     y_dir = 1;
+       x_dir+= 0.3*Math.log(Math.abs(ai_x - ball_x))*(ball_x - ai_x)/Math.abs(ball_x - ai_x);
+    }
+    if(ball_y <= 15){
+      wins++;
+      reset_everything();
     }
     if(move_right && control_x < 450){
 	control_x++;
@@ -103,19 +111,28 @@ var move_commands = function(){
     }
     if(ball_y >= 495){
 	reset_everything();
+  losses++;
     }
-    if(y_dir == -1){
-	var pred_x = ball_x + x_dir*(ball_y - 45);
-	if(pred_x <= 15){
-	    pred_x = 30 - pred_x;
-	}else if(pred_x >= 485){
-	    pred_x = 970 - pred_x;
-	}
-	if(pred_x < ai_x && ai_x > 50){
-	    ai_x -= Math.min(1.2, ai_x - pred_x);
-	}else if(pred_x > ai_x && ai_x < 450){
-	    ai_x += Math.min(1.2, pred_x - ai_x);
-	}
+    if(ball_x > ai_x){
+      if(ai_x < 450){
+        ai_x+=0.7;
+        if(ball_x-40 > ai_x){
+          ai_x+=0.7;
+          if(ball_x-80 > ai_x){
+            ai_x+=0.7;
+          }
+        }
+      }
+    }else{
+      if(ai_x > 50){
+        ai_x-=0.7;
+        if(ball_x+40 < ai_x){
+          ai_x-=0.7;
+          if(ball_x+80 < ai_x){
+            ai_x-=0.7;
+          }
+        }
+      }
     }
     if(move_right && (control_x<450)){
 	control_x+=1.5;
@@ -128,11 +145,8 @@ var move_commands = function(){
 	//move_right = false;
     }
     if((ball_y > 455 && ball_y < 475) && (Math.abs(ball_x - control_x) < 50)){
-	y_dir = -1;
-    }
-    //100x25 - if ball goes beyond "control_y", and isnt in range of the bar, reset
-    if((ball_y>480) && ((ball_x < (control_x - 50)) || (ball_x > (control_x + 50)))){
-	reset_everything();
+	     y_dir = -1;
+       x_dir+= 0.3*Math.log(Math.abs(control_x - ball_x))*(ball_x - control_x)/Math.abs(ball_x - control_x);
     }
 }
 
@@ -148,7 +162,7 @@ var moveBar = function(e){
 	}
     }else if(e.keyCode == 80){
 	game_on = !game_on;
-    }   
+    }
 }
 
 var stopBar = function(e){
