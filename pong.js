@@ -95,9 +95,14 @@ var move_commands = function(){
     if(ball_x <= 15){
       x_dir = Math.abs(x_dir);
     }
-    if(ball_y <= 45 && Math.abs(ball_x-ai_x) <= 50){
+    if(ball_y <= 45 && (Math.abs(ball_x-ai_x) <= 50 || check_corners())){
 	     y_dir = 1;
        x_dir+= 0.3*Math.log(Math.abs(ai_x - ball_x))*(ball_x - ai_x)/Math.abs(ball_x - ai_x);
+       if(x_dir > 3){
+         x_dir = 3;
+       }else if(x_dir < -3){
+         x_dir = -3;
+       }
     }
     if(ball_y <= 15){
       wins++;
@@ -144,12 +149,32 @@ var move_commands = function(){
 	moveBar();
 	//move_right = false;
     }
-    if((ball_y > 455 && ball_y < 475) && (Math.abs(ball_x - control_x) < 50)){
+    if((ball_y > 455) && ((Math.abs(ball_x - control_x) < 50) || check_corners())){
 	     y_dir = -1;
        x_dir+= 0.3*Math.log(Math.abs(control_x - ball_x))*(ball_x - control_x)/Math.abs(ball_x - control_x);
+       if(x_dir > 3){
+         x_dir = 3;
+       }else if(x_dir < -3){
+         x_dir = -3;
+       }
     }
 }
 
+var check_corners = function(){
+  var a = ball_x;
+  var b = ball_y;
+  var c1x = control_x+47-a;
+  var c2x = control_x-47-a;
+  var c1y = 473-b;
+  var d1x = ai_x+47-a;
+  var d2x = ai_x-47-a;
+  var d1y = 27-b;
+  if(c1x*c1x+c1y*c1y < 324){return true;}
+  if(c2x*c2x+c1y*c1y < 324){return true;}
+  if(d1x*d1x+d1y*d1y < 324){return true;}
+  if(d2x*d2x+d1y*d1y < 324){return true;}
+  return false;
+}
 //user input
 var moveBar = function(e){
     if(e.keyCode == 37){
