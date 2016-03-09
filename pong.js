@@ -104,52 +104,7 @@ var move_commands = function(){
          x_dir = -3;
        }
     }
-    if(ball_y <= 15){
-      wins++;
-      reset_everything();
-    }
-    if(move_right && control_x < 450){
-	control_x++;
-    }
-    if(move_left && control_x > 50){
-	control_x--;
-    }
-    if(ball_y >= 495){
-	reset_everything();
-  losses++;
-    }
-    if(ball_x > ai_x){
-      if(ai_x < 450){
-        ai_x+=0.7;
-        if(ball_x-40 > ai_x){
-          ai_x+=0.7;
-          if(ball_x-80 > ai_x){
-            ai_x+=0.7;
-          }
-        }
-      }
-    }else{
-      if(ai_x > 50){
-        ai_x-=0.7;
-        if(ball_x+40 < ai_x){
-          ai_x-=0.7;
-          if(ball_x+80 < ai_x){
-            ai_x-=0.7;
-          }
-        }
-      }
-    }
-    if(move_right && (control_x<450)){
-	control_x+=1.5;
-	moveBar();
-	//move_left = false;
-    }
-    if(move_left && (control_x>50)){
-	control_x-=1.5;
-	moveBar();
-	//move_right = false;
-    }
-    if((ball_y > 455) && ((Math.abs(ball_x - control_x) < 50) || check_corners())){
+    if((ball_y > 455) && ((Math.abs(ball_x - control_x) <= 50) || check_corners())){
 	     y_dir = -1;
        x_dir+= 0.3*Math.log(Math.abs(control_x - ball_x))*(ball_x - control_x)/Math.abs(ball_x - control_x);
        if(x_dir > 3){
@@ -157,6 +112,45 @@ var move_commands = function(){
        }else if(x_dir < -3){
          x_dir = -3;
        }
+    }
+    if(ball_y <= 15){
+      wins++;
+      reset_everything();
+    }
+    if(ball_y >= 495){
+        losses++;
+	       reset_everything();
+    }
+    if(ball_x > ai_x){
+      if(ai_x < 450){
+        ai_x+=0.6;
+        if(ball_x-40 > ai_x){
+          ai_x+=0.3;
+          if(ball_x-80 > ai_x){
+            ai_x+=1.4;
+          }
+        }
+      }
+    }else{
+      if(ai_x > 50){
+        ai_x-=0.6;
+        if(ball_x+40 < ai_x){
+          ai_x-=0.3;
+          if(ball_x+80 < ai_x){
+            ai_x-=1.4;
+          }
+        }
+      }
+    }
+    if(move_right && (control_x<450)){
+	control_x+=0.8;
+	moveBar();
+	//move_left = false;
+    }
+    if(move_left && (control_x>50)){
+	control_x-=0.8;
+	moveBar();
+	//move_right = false;
     }
 }
 
