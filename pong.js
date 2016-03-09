@@ -185,8 +185,14 @@ var moveBar = function(e){
 }
 
 var stopBar = function(e){
-    move_left=false;
-    move_right=false;
+    if(e.keycode ==37){
+	move_right=false;
+    } else if(e.keycode == 39){
+	move_left=false;
+    } else {
+	move_left=false;
+	move_right=false;
+    }
 }
 
 //commands that run every frame
