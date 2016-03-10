@@ -95,7 +95,7 @@ var move_commands = function(){
     if(ball_x <= 15){
 	x_dir = Math.abs(x_dir);
     }
-    if(ball_y <= 45 && (Math.abs(ball_x-ai_x) <= 50 || check_corners()) && y_dir <= 0){
+    if((ball_y <= 45 && ball_y >= 5) && (Math.abs(ball_x-ai_x) <= 50 || check_corners()) && y_dir <= 0){
 	y_dir = 1;
 	x_dir+= 0.3*Math.log(Math.abs(ai_x - ball_x))*(ball_x - ai_x)/Math.abs(ball_x - ai_x);
 	if(x_dir > 3){
@@ -104,7 +104,7 @@ var move_commands = function(){
             x_dir = -3;
 	}
     }
-    if((ball_y > 455) && ((Math.abs(ball_x - control_x) <= 50) || check_corners()) && y_dir >= 0){
+    if((ball_y > 455 && ball_y < 495) && ((Math.abs(ball_x - control_x) <= 50) || check_corners()) && y_dir >= 0){
 	y_dir = -1;
 	x_dir+= 0.3*Math.log(Math.abs(control_x - ball_x))*(ball_x - control_x)/Math.abs(ball_x - control_x);
 	if(x_dir > 3){
@@ -113,11 +113,11 @@ var move_commands = function(){
             x_dir = -3;
 	}
     }
-    if(ball_y <= 15){
+    if(ball_y <= -15){
 	wins++;
 	reset_everything();
     }
-    if(ball_y >= 495){
+    if(ball_y >= 515){
         losses++;
 	reset_everything();
     }
