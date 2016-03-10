@@ -90,54 +90,54 @@ var move_commands = function(){
     ball_x+=x_dir;
     ball_y+=y_dir;
     if(ball_x >= 485){
-	     x_dir = -1*Math.abs(x_dir);
+	x_dir = -1*Math.abs(x_dir);
     }
     if(ball_x <= 15){
-      x_dir = Math.abs(x_dir);
+	x_dir = Math.abs(x_dir);
     }
     if(ball_y <= 45 && (Math.abs(ball_x-ai_x) <= 50 || check_corners()) && y_dir <= 0){
-	     y_dir = 1;
-       x_dir+= 0.3*Math.log(Math.abs(ai_x - ball_x))*(ball_x - ai_x)/Math.abs(ball_x - ai_x);
-       if(x_dir > 3){
-         x_dir = 3;
-       }else if(x_dir < -3){
-         x_dir = -3;
-       }
+	y_dir = 1;
+	x_dir+= 0.3*Math.log(Math.abs(ai_x - ball_x))*(ball_x - ai_x)/Math.abs(ball_x - ai_x);
+	if(x_dir > 3){
+            x_dir = 3;
+	}else if(x_dir < -3){
+            x_dir = -3;
+	}
     }
     if((ball_y > 455) && ((Math.abs(ball_x - control_x) <= 50) || check_corners()) && y_dir >= 0){
-	     y_dir = -1;
-       x_dir+= 0.3*Math.log(Math.abs(control_x - ball_x))*(ball_x - control_x)/Math.abs(ball_x - control_x);
-       if(x_dir > 3){
-         x_dir = 3;
-       }else if(x_dir < -3){
-         x_dir = -3;
-       }
+	y_dir = -1;
+	x_dir+= 0.3*Math.log(Math.abs(control_x - ball_x))*(ball_x - control_x)/Math.abs(ball_x - control_x);
+	if(x_dir > 3){
+            x_dir = 3;
+	}else if(x_dir < -3){
+            x_dir = -3;
+	}
     }
     if(ball_y <= 15){
-      wins++;
-      reset_everything();
+	wins++;
+	reset_everything();
     }
     if(ball_y >= 495){
         losses++;
-	       reset_everything();
+	reset_everything();
     }
     if(ball_x > ai_x){
       if(ai_x < 450){
-        ai_x+=0.6;
-        if(ball_x-40 > ai_x){
+        ai_x+=0.7;
+        if(ball_x-50 > ai_x){
           ai_x+=0.3;
           if(ball_x-80 > ai_x){
-            ai_x+=1.4;
+            ai_x+=1.7;
           }
         }
       }
     }else{
       if(ai_x > 50){
-        ai_x-=0.6;
-        if(ball_x+40 < ai_x){
+        ai_x-=0.7;
+        if(ball_x+50 < ai_x){
           ai_x-=0.3;
           if(ball_x+80 < ai_x){
-            ai_x-=1.4;
+            ai_x-=1.7;
           }
         }
       }
@@ -201,7 +201,7 @@ var frame = function(e){
         setup();
       }
     if(game_on){
-	     move_commands();
+	move_commands();
     }
 }
 var go = setInterval(frame,speed);
