@@ -144,13 +144,9 @@ var move_commands = function(){
     }
     if(move_right && (control_x<450)){
 	control_x+=0.8;
-	moveBar();
-	//move_left = false;
     }
     if(move_left && (control_x>50)){
 	control_x-=0.8;
-	moveBar();
-	//move_right = false;
     }
 }
 
@@ -169,28 +165,28 @@ var check_corners = function(){
   if(d2x*d2x+d1y*d1y < 324){return true;}
   return false;
 }
+
 //user input
 var moveBar = function(e){
-    if(e.keyCode == 37){
+    console.log("Pressed " + e.keyCode);
+    if(e.keyCode === 37){
 	move_left=true;
-    }else if (e.keyCode == 39){
+    }else if (e.keyCode === 39){
 	move_right=true;
-    }else if (e.keyCode == 32){
+    }else if (e.keyCode === 32){
 	if(timer_boolean && !game_on){
 	    game_on=true;
 	}
-    }else if(e.keyCode == 80){
+    }else if(e.keyCode === 80){
 	game_on = !game_on;
     }
 }
 
 var stopBar = function(e){
-    if(e.keycode ==37){
-	move_right=false;
-    } else if(e.keycode == 39){
+    console.log("Released " + e.keyCode);
+    if(e.keyCode ==37){
 	move_left=false;
-    } else {
-	move_left=false;
+    } else if(e.keyCode == 39){
 	move_right=false;
     }
 }
